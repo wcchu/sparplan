@@ -10,6 +10,7 @@ python = "^3.12"
 numpy = "^2.2.4"
 pandas = "^2.2.3"
 pyarrow = "^19.0.1"
+confuse = "^2.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
