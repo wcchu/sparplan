@@ -1,10 +1,14 @@
 from Sparplan import logger, config
 from Sparplan.constants import *
+from Sparplan.input_reader import InputReader
 
 
 def main():
-    test_field = config["test_field"].get(str)
-    logger.info("test_field = {}".format(test_field))
+    # read data
+    data = InputReader(config).read()
+    logger.info("data = {}".format(data))
+
+    logger.info("Finished")
 
 
 if __name__ == "__main__":

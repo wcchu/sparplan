@@ -1,1 +1,1 @@
-test_field: "test"
+input_data_file: 'data/djia.parquet'
