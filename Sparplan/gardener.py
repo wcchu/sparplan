@@ -6,28 +6,34 @@ class Gardener:
     def __init__(self, config):
         self.start_date = date.fromisoformat(config["start_date"].get(str))
         self.end_date = date.fromisoformat(config["end_date"].get(str))
-        self.seeds = config["start_seeds"].get(float)
         self.plant_schedule = config["plant_schedule"].get(str)
-        self.plant_amount = config["plant_amount"].get(float)
-        self.flowers = 0.0
+        self.seeds_used = 0.0
+        self.flowers_grown = 0.0
 
     def work(self, data):
         interval = ((self.end_date - self.start_date)).days
-        logger.info("interval = {} days".format(interval))
+        logger.debug("interval = {} days".format(interval))
 
         for days_ in range(interval + 1):
             now_date = self.start_date + timedelta(days_)
-            if self.plant_today(now_date, self.plant_schedule):
-                logger.info(
-                    "date = {}, total seeds = {}, total flowers = {}".format(
-                        now_date, self.seeds, self.flowers
+            if self.day_on_schedule(now_date, self.plant_schedule):
+                logger.debug(
+                    "date = {}, total seeds used = {}, total flowers grown = {}".format(
+                        now_date, self.seeds_used, self.flowers_grown
                     )
                 )
                 value = self.find_value(data, now_date)
                 self.plant(value)
 
+    def final_report(self, data):
+        final_value = self.find_value(data, self.end_date)
+        total_flowers_value = self.flowers_grown * final_value
+        rel_gain = (total_flowers_value / self.seeds_used) - 1.0
+        logger.info("final relative gain = {}".format(rel_gain))
+        return
+
     @staticmethod
-    def plant_today(today, schedule):
+    def day_on_schedule(today, schedule):
         """
         Return whether today is on the planting schedule.
 
@@ -51,14 +57,12 @@ class Gardener:
             checked_date = aim_date + timedelta(shift)
             value = data.get(str(checked_date), -1.0)
             shift = shift + 1
-        logger.info("got value {} on {}".format(value, checked_date))
+        logger.debug("got value {} on {}".format(value, checked_date))
         return value
 
     def plant(self, value):
-        self.seeds = self.seeds - self.plant_amount
-        flower_amount = self.plant_amount / value
-        self.flowers = self.flowers + flower_amount
-        logger.info(
-            "convert {} seeds to {} flowers".format(self.plant_amount, flower_amount)
-        )
+        self.seeds_used = self.seeds_used + 1.0
+        new_flowers = 1.0 / value
+        self.flowers_grown = self.flowers_grown + new_flowers
+        logger.debug("convert a seed to {} flowers".format(new_flowers))
         return

@@ -1,4 +1,5 @@
 import pandas as pd
+from Sparplan import logger
 
 
 class InputReader:
@@ -8,4 +9,5 @@ class InputReader:
 
     def read(self):
         df = pd.read_parquet(self.input_data_file)
+        logger.debug("data of {} rows imported".format(len(df)))
         return {row["date"]: row["value"] for _, row in df.iterrows()}

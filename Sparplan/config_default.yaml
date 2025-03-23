@@ -1,9 +1,10 @@
+# "debug", "info", "warning", "error", "critical"
+log_level: 'info'
+
 input_data_file: 'data/djia.parquet'
 
 start_date: '2024-05-01'
-start_seeds: 100.0
 end_date: '2024-05-31'
 
 # weekly or monthly
 plant_schedule: 'weekly'
-plant_amount: 5.0
