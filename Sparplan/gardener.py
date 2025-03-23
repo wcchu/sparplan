@@ -42,21 +42,20 @@ class Gardener:
             return True
         return False
 
-    def plant(self, data, now_date):
-
-        value = data.get(str(now_date), -1.0)
-        if value < 0.0:
-            logger.info("date not found in data")
-            # TODO: shift date later when value is available
-            return
+    def plant(self, data, scheduled_date):
+        value = -1.0
+        shift = 0
+        while value < 0.0:
+            checked_date = scheduled_date + timedelta(shift)
+            value = data.get(str(checked_date), -1.0)
+            shift = shift + 1
+        logger.info("got value on {}, at {}".format(checked_date, value))
 
         self.seeds = self.seeds - self.plant_amount
         flower_amount = self.plant_amount / value
         self.flowers = self.flowers + flower_amount
         logger.info(
-            "at value = {}, convert {} seeds to {} flowers".format(
-                value, self.plant_amount, flower_amount
-            )
+            "convert {} seeds to {} flowers".format(self.plant_amount, flower_amount)
         )
 
         return
