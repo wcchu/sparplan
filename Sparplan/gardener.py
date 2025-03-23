@@ -11,6 +11,15 @@ class Gardener:
         self.flowers_grown = 0.0
 
     def work(self, data):
+        if str(self.start_date) < min(list(data.keys())):
+            raise ValueError(
+                "start date {} earlier than available data".format(self.start_date)
+            )
+        if str(self.end_date) > max(list(data.keys())):
+            raise ValueError(
+                "end date {} later than available data".format(self.end_date)
+            )
+
         interval = ((self.end_date - self.start_date)).days
         logger.debug("interval = {} days".format(interval))
 
@@ -51,6 +60,7 @@ class Gardener:
 
     @staticmethod
     def find_value(data, aim_date):
+        logger.debug("trying to find value on {}".format(aim_date))
         value = -1.0
         shift = 0
         while value < 0.0:
