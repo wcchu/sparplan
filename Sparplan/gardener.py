@@ -35,10 +35,13 @@ class Gardener:
                 self.plant(value)
 
     def final_report(self, data):
+        initial_value = self.find_value(data, self.start_date)
         final_value = self.find_value(data, self.end_date)
         total_flowers_value = self.flowers_grown * final_value
         rel_gain = (total_flowers_value / self.seeds_used) - 1.0
-        logger.info("final relative gain = {}".format(rel_gain))
+        rel_value_change = (final_value / initial_value) - 1.0
+        logger.info("relative value change = {:.6f}".format(rel_value_change))
+        logger.info("relative gain = {:.6f}".format(rel_gain))
         return
 
     @staticmethod
