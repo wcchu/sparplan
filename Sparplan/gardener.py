@@ -19,11 +19,12 @@ class Gardener:
             now_date = self.start_date + timedelta(days_)
             if self.plant_today(now_date, self.plant_schedule):
                 logger.info(
-                    "plant on {} with seeds = {} and flowers = {}".format(
+                    "date = {}, total seeds = {}, total flowers = {}".format(
                         now_date, self.seeds, self.flowers
                     )
                 )
-                self.plant(data, now_date)
+                value = self.find_value(data, now_date)
+                self.plant(value)
 
     @staticmethod
     def plant_today(today, schedule):
@@ -42,20 +43,22 @@ class Gardener:
             return True
         return False
 
-    def plant(self, data, scheduled_date):
+    @staticmethod
+    def find_value(data, aim_date):
         value = -1.0
         shift = 0
         while value < 0.0:
-            checked_date = scheduled_date + timedelta(shift)
+            checked_date = aim_date + timedelta(shift)
             value = data.get(str(checked_date), -1.0)
             shift = shift + 1
-        logger.info("got value on {}, at {}".format(checked_date, value))
+        logger.info("got value {} on {}".format(value, checked_date))
+        return value
 
+    def plant(self, value):
         self.seeds = self.seeds - self.plant_amount
         flower_amount = self.plant_amount / value
         self.flowers = self.flowers + flower_amount
         logger.info(
             "convert {} seeds to {} flowers".format(self.plant_amount, flower_amount)
         )
-
         return
