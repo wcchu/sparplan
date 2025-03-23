@@ -7,5 +7,5 @@ class InputReader:
         self.input_data_file = self.config["input_data_file"].get(str)
 
     def read(self):
-        data = pd.read_parquet(self.input_data_file).sort_values("date")
-        return data
+        df = pd.read_parquet(self.input_data_file)
+        return {row["date"]: row["value"] for _, row in df.iterrows()}

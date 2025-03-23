@@ -7,7 +7,7 @@ from Sparplan.gardener import Gardener
 def main():
     # read data
     data = InputReader(config).read()
-    logger.info("data = {}".format(data))
+    # logger.info("data = {}".format(data))
 
     gardener = Gardener(config)
     gardener.work(data)
